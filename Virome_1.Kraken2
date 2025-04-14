@@ -1,0 +1,203 @@
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 10 \
+        --output KO_col_5-kraken2-out.txt \
+        --report KO_col_5-kraken2-report.txt \
+        --unclassified-out KO_col_5_unclassified_#.fastq \
+        KO_col_5_1.fastq KO_col_5_2.fastq
+        
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 10 \
+        --output KO_col_6-kraken2-out.txt \
+        --report KO_col_6-kraken2-report.txt \
+        --unclassified-out KO_col_6_unclassified_#.fastq \
+        KO_col_6_1.fastq KO_col_6_2.fastq
+        
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 2 \
+        --output KO_col_7-kraken2-out.txt \
+        --report KO_col_7-kraken2-report.txt \
+        --unclassified-out KO_col_7_unclassified#.fastq \
+        KO_col_7_1.fastq KO_col_7_2.fastq
+        
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 2 \
+        --output KO_col_8-kraken2-out.txt \
+        --report KO_col_8-kraken2-report.txt \
+        --unclassified-out KO_col_8_unclassified#.fastq \
+        KO_col_8_1.fastq KO_col_8_2.fastq
+        
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 2 \
+        --output KO_col_9-kraken2-out.txt \
+        --report KO_col_9-kraken2-report.txt \
+        --unclassified-out KO_col_9_unclassified#.fastq \
+        KO_col_9_1.fastq KO_col_9_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 2 \
+        --output KO_col_10-kraken2-out.txt \
+        --report KO_col_10-kraken2-report.txt \
+        --unclassified-out KO_col_10_unclassified#.fastq \
+        KO_col_10_1.fastq KO_col_10_2.fastq
+        
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 2 \
+        --output KO_col_11-kraken2-out.txt \
+        --report KO_col_11-kraken2-report.txt \
+        --unclassified-out KO_col_11_unclassified#.fastq \
+        KO_col_11_1.fastq KO_col_11_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 2 \
+        --output KO_col_15-kraken2-out.txt \
+        --report KO_col_15-kraken2-report.txt \
+        --unclassified-out KO_col_15_unclassified#.fastq \
+        KO_col_15_1.fastq KO_col_15_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 2 \
+        --output KO_col_15-kraken2-out.txt \
+        --report KO_col_15-kraken2-report.txt \
+        --unclassified-out KO_col_15_unclassified#.fastq \
+        KO_col_15_1.fastq KO_col_15_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 2 \
+        --output KO_veh_3-kraken2-out.txt \
+        --report KO_veh_3-kraken2-report.txt \
+        --unclassified-out KO_veh_3_unclassified#.fastq \
+        KO_veh_3_1.fastq KO_veh_3_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 2 \
+        --output KO_veh_4-kraken2-out.txt \
+        --report KO_veh_4-kraken2-report.txt \
+        --unclassified-out KO_veh_4_unclassified#.fastq \
+        KO_veh_4_1.fastq KO_veh_4_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 2 \
+        --output KO_veh_5-kraken2-out.txt \
+        --report KO_veh_5-kraken2-report.txt \
+        --unclassified-out KO_veh_5_unclassified#.fastq \
+        KO_veh_5_1.fastq KO_veh_5_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 2 \
+        --output KO_veh_9-kraken2-out.txt \
+        --report KO_veh_9-kraken2-report.txt \
+        --unclassified-out KO_veh_9_unclassified#.fastq \
+        KO_veh_9_1.fastq KO_veh_9_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 2 \
+        --output KO_veh_11-kraken2-out.txt \
+        --report KO_veh_11-kraken2-report.txt \
+        --unclassified-out KO_veh_11_unclassified#.fastq \
+        KO_veh_11_1.fastq KO_veh_11_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 2 \
+        --output KO_veh_13-kraken2-out.txt \
+        --report KO_veh_13-kraken2-report.txt \
+        --unclassified-out KO_veh_13_unclassified#.fastq \
+        KO_veh_13_1.fastq KO_veh_13_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 2 \
+        --output KO_veh_14-kraken2-out.txt \
+        --report KO_veh_14-kraken2-report.txt \
+        --unclassified-out KO_veh_14_unclassified#.fastq \
+        KO_veh_14_1.fastq KO_veh_14_2.fastq
+        
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output NC-kraken2-out.txt \
+        --report NC-kraken2-report.txt \
+        --unclassified-out NC_unclassified#.fastq \
+        NC_1.fastq NC_2.fastq        
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output PC-kraken2-out.txt \
+        --report PC-kraken2-report.txt \
+        --unclassified-out PC_unclassified#.fastq \
+        PC_1.fastq PC_2.fastq      
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output WT_col_1-kraken2-out.txt \
+        --report WT_col_1-kraken2-report.txt \
+        --unclassified-out WT_col_1_unclassified#.fastq \
+        WT_col_1_1.fastq WT_col_1_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output WT_col_2-kraken2-out.txt \
+        --report WT_col_2-kraken2-report.txt \
+        --unclassified-out WT_col_2_unclassified#.fastq \
+        WT_col_2_1.fastq WT_col_2_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output WT_col_3-kraken2-out.txt \
+        --report WT_col_3-kraken2-report.txt \
+        --unclassified-out WT_col_3_unclassified#.fastq \
+        WT_col_3_1.fastq WT_col_3_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output WT_col_6-kraken2-out.txt \
+        --report WT_col_6-kraken2-report.txt \
+        --unclassified-out WT_col_6_unclassified#.fastq \
+        WT_col_6_1.fastq WT_col_6_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output WT_col_8-kraken2-out.txt \
+        --report WT_col_8-kraken2-report.txt \
+        --unclassified-out WT_col_8_unclassified#.fastq \
+        WT_col_8_1.fastq WT_col_8_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output WT_col_10-kraken2-out.txt \
+        --report WT_col_10-kraken2-report.txt \
+        --unclassified-out WT_col_10_unclassified#.fastq \
+        WT_col_10_1.fastq WT_col_10_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output WT_col_12-kraken2-out.txt \
+        --report WT_col_12-kraken2-report.txt \
+        --unclassified-out WT_col_12_unclassified#.fastq \
+        WT_col_12_1.fastq WT_col_12_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output WT_veh_1-kraken2-out.txt \
+        --report WT_veh_1-kraken2-report.txt \
+        --unclassified-out WT_veh_1_unclassified#.fastq \
+        WT_veh_1_1.fastq WT_veh_1_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output WT_veh_2-kraken2-out.txt \
+        --report WT_veh_2-kraken2-report.txt \
+        --unclassified-out WT_veh_2_unclassified#.fastq \
+        WT_veh_2_1.fastq WT_veh_2_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output WT_veh_4-kraken2-out.txt \
+        --report WT_veh_4-kraken2-report.txt \
+        --unclassified-out WT_veh_4_unclassified#.fastq \
+        WT_veh_4_1.fastq WT_veh_4_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output WT_veh_7-kraken2-out.txt \
+        --report WT_veh_7-kraken2-report.txt \
+        --unclassified-out WT_veh_7_unclassified#.fastq \
+        WT_veh_7_1.fastq WT_veh_7_2.fastq
+
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output WT_veh_8-kraken2-out.txt \
+        --report WT_veh_8-kraken2-report.txt \
+        --unclassified-out WT_veh_8_unclassified#.fastq \
+        WT_veh_8_1.fastq WT_veh_8_2.fastq
+        
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output WT_veh_11-kraken2-out.txt \
+        --report WT_veh_11-kraken2-report.txt \
+        --unclassified-out WT_veh_11_unclassified#.fastq \
+        WT_veh_11_1.fastq WT_veh_11_2.fastq        
+        
+kraken2 --paired --db /media/SSD/Juneyoung/ColesevelamVirome/kraken2bacterialdb --threads 4 \
+        --output WT_veh_14-kraken2-out.txt \
+        --report WT_veh_14-kraken2-report.txt \
+        --unclassified-out WT_veh_14_unclassified#.fastq \
+        WT_veh_14_1.fastq WT_veh_14_2.fastq        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
