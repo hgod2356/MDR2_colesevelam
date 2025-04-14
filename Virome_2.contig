@@ -1,0 +1,127 @@
+#megahit
+megahit -1 trimmedfastq/KO_veh3/KO_veh_3_unclassified_1.fastq -2 trimmedfastq/KO_veh3/KO_veh_3_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/KO_veh3/assemble_KO_veh3_unclassified/
+megahit -1 trimmedfastq/KO_veh4/KO_veh_4_unclassified_1.fastq -2 trimmedfastq/KO_veh4/KO_veh_4_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/KO_veh4/assemble_KO_veh4_unclassified/
+megahit -1 trimmedfastq/KO_veh5/KO_veh_5_unclassified_1.fastq -2 trimmedfastq/KO_veh5/KO_veh_5_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/KO_veh5/assemble_KO_veh5_unclassified/
+megahit -1 trimmedfastq/KO_veh9/KO_veh_9_unclassified_1.fastq -2 trimmedfastq/KO_veh9/KO_veh_9_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/KO_veh9/assemble_KO_veh9_unclassified/
+megahit -1 trimmedfastq/KO_veh11/KO_veh_11_unclassified_1.fastq -2 trimmedfastq/KO_veh11/KO_veh_11_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/KO_veh11/assemble_KO_veh11_unclassified/
+megahit -1 trimmedfastq/KO_veh13/KO_veh_13_unclassified_1.fastq -2 trimmedfastq/KO_veh13/KO_veh_13_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/KO_veh13/assemble_KO_veh13_unclassified/
+megahit -1 trimmedfastq/KO_veh14/KO_veh_14_unclassified_1.fastq -2 trimmedfastq/KO_veh14/KO_veh_14_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/KO_veh14/assemble_KO_veh14_unclassified/
+megahit -1 trimmedfastq/WT_col1/WT_col_1_unclassified_1.fastq -2 trimmedfastq/WT_col1/WT_col_1_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/WT_col1/assemble_WT_col1_unclassified/
+megahit -1 trimmedfastq/WT_col2/WT_col_2_unclassified_1.fastq -2 trimmedfastq/WT_col2/WT_col_2_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/WT_col2/assemble_WT_col2_unclassified/
+megahit -1 trimmedfastq/WT_col3/WT_col_3_unclassified_1.fastq -2 trimmedfastq/WT_col3/WT_col_3_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/WT_col3/assemble_WT_col3_unclassified/
+megahit -1 trimmedfastq/WT_col6/WT_col_6_unclassified_1.fastq -2 trimmedfastq/WT_col6/WT_col_6_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/WT_col6/assemble_WT_col6_unclassified/
+megahit -1 trimmedfastq/WT_col8/WT_col_8_unclassified_1.fastq -2 trimmedfastq/WT_col8/WT_col_8_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/WT_col8/assemble_WT_col8_unclassified/
+megahit -1 trimmedfastq/WT_col10/WT_col_10_unclassified_1.fastq -2 trimmedfastq/WT_col10/WT_col_10_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/WT_col10/assemble_WT_col10_unclassified/
+megahit -1 trimmedfastq/WT_col12/WT_col_12_unclassified_1.fastq -2 trimmedfastq/WT_col12/WT_col_12_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/WT_col12/assemble_WT_col12_unclassified/
+megahit -1 trimmedfastq/WT_veh1/WT_veh_1_unclassified_1.fastq -2 trimmedfastq/WT_veh1/WT_veh_1_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/WT_veh1/assemble_WT_veh1_unclassified/
+megahit -1 trimmedfastq/WT_veh2/WT_veh_2_unclassified_1.fastq -2 trimmedfastq/WT_veh2/WT_veh_2_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/WT_veh2/assemble_WT_veh2_unclassified/
+megahit -1 trimmedfastq/WT_veh4/WT_veh_4_unclassified_1.fastq -2 trimmedfastq/WT_veh4/WT_veh_4_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/WT_veh4/assemble_WT_veh4_unclassified/
+megahit -1 trimmedfastq/WT_veh7/WT_veh_7_unclassified_1.fastq -2 trimmedfastq/WT_veh7/WT_veh_7_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/WT_veh7/assemble_WT_veh7_unclassified/
+megahit -1 trimmedfastq/WT_veh8/WT_veh_8_unclassified_1.fastq -2 trimmedfastq/WT_veh8/WT_veh_8_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/WT_veh8/assemble_WT_veh8_unclassified/
+megahit -1 trimmedfastq/WT_veh11/WT_veh_11_unclassified_1.fastq -2 trimmedfastq/WT_veh11/WT_veh_11_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/WT_veh11/assemble_WT_veh11_unclassified/
+megahit -1 trimmedfastq/WT_veh14/WT_veh_14_unclassified_1.fastq -2 trimmedfastq/WT_veh14/WT_veh_14_unclassified_2.fastq -t 5 -m 0.4 -o trimmedfastq/WT_veh14/assemble_WT_veh14_unclassified/
+
+#CD-hit
+cd-hit -i 2.megahit_assembled/KO_col6_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/KO_col6/KO_col6_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 10
+cd-hit -i 2.megahit_assembled/KO_col7_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/KO_col7/KO_col7_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 10
+cd-hit -i 2.megahit_assembled/KO_col8_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/KO_col8/KO_col8_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 10
+cd-hit -i 2.megahit_assembled/KO_col9_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/KO_col9/KO_col9_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 10
+cd-hit -i 2.megahit_assembled/KO_col10_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/KO_col10/KO_col10_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 10
+cd-hit -i 2.megahit_assembled/KO_col11_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/KO_col11/KO_col11_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 10
+cd-hit -i 2.megahit_assembled/KO_col15_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/KO_col15/KO_col15_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 10
+cd-hit -i 2.megahit_assembled/KO_veh3_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/KO_veh3/KO_veh3_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 10
+cd-hit -i 2.megahit_assembled/KO_veh4_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/KO_veh4/KO_veh4_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/KO_veh5_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/KO_veh5/KO_veh5_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/KO_veh9_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/KO_veh9/KO_veh9_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/KO_veh11_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/KO_veh11/KO_veh11_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/WT_veh1_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/WT_veh1/WT_veh1_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/WT_veh2_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/WT_veh2/WT_veh2_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/WT_veh4_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/WT_veh4/WT_veh4_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/WT_veh7_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/WT_veh7/WT_veh7_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/WT_veh8_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/WT_veh8/WT_veh8_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/WT_veh11_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/WT_veh11/WT_veh11_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/WT_veh14_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/WT_veh14/WT_veh14_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/WT_col10_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/WT_col10/WT_col10_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/WT_col12_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/WT_col12/WT_col12_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/KO_veh13_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/KO_veh13/KO_veh13_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/KO_veh14_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/KO_veh14/KO_veh14_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/WT_col2_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/WT_col2/WT_col2_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/WT_col1_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/WT_col1/WT_col1_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/WT_col3_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/WT_col3/WT_col3_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/WT_col6_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/WT_col6/WT_col6_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+cd-hit -i 2.megahit_assembled/WT_col8_unclassified/final.contigs.fa -o 2-2.cdhit_95identity/WT_col8/WT_col8_assembled_95.fasta -c 0.95 -n 5 -M 96000 -d 400 -T 100
+
+#checkv - after 95 clustering and virsorter2, 4.checkv_using3,len1000
+checkv end_to_end 3.virsorter2_using2-2,len1000/KO_col5/final-viral-combined.fa 4.checkv_using3,len1000/KO_col5/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/KO_col6/final-viral-combined.fa 4.checkv_using3,len1000/KO_col6/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/KO_col7/final-viral-combined.fa 4.checkv_using3,len1000/KO_col7/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/KO_col8/final-viral-combined.fa 4.checkv_using3,len1000/KO_col8/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/KO_col9/final-viral-combined.fa 4.checkv_using3,len1000/KO_col9/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/KO_col10/final-viral-combined.fa 4.checkv_using3,len1000/KO_col10/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/KO_col11/final-viral-combined.fa 4.checkv_using3,len1000/KO_col11/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/KO_col15/final-viral-combined.fa 4.checkv_using3,len1000/KO_col15/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/WT_col1/final-viral-combined.fa 4.checkv_using3,len1000/WT_col1/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/WT_col2/final-viral-combined.fa 4.checkv_using3,len1000/WT_col2/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/WT_col3/final-viral-combined.fa 4.checkv_using3,len1000/WT_col3/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/WT_col6/final-viral-combined.fa 4.checkv_using3,len1000/WT_col6/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/WT_col8/final-viral-combined.fa 4.checkv_using3,len1000/WT_col8/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/WT_col10/final-viral-combined.fa 4.checkv_using3,len1000/WT_col10/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/WT_col12/final-viral-combined.fa 4.checkv_using3,len1000/WT_col12/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/WT_veh1/final-viral-combined.fa 4.checkv_using3,len1000/WT_veh1/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/WT_veh2/final-viral-combined.fa 4.checkv_using3,len1000/WT_veh2/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/WT_veh4/final-viral-combined.fa 4.checkv_using3,len1000/WT_veh4/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/WT_veh7/final-viral-combined.fa 4.checkv_using3,len1000/WT_veh7/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/WT_veh8/final-viral-combined.fa 4.checkv_using3,len1000/WT_veh8/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/WT_veh11/final-viral-combined.fa 4.checkv_using3,len1000/WT_veh11/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/WT_veh14/final-viral-combined.fa 4.checkv_using3,len1000/WT_veh14/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/KO_veh3/final-viral-combined.fa 4.checkv_using3,len1000/KO_veh3/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/KO_veh4/final-viral-combined.fa 4.checkv_using3,len1000/KO_veh4/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/KO_veh5/final-viral-combined.fa 4.checkv_using3,len1000/KO_veh5/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/KO_veh9/final-viral-combined.fa 4.checkv_using3,len1000/KO_veh9/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/KO_veh11/final-viral-combined.fa 4.checkv_using3,len1000/KO_veh11/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/KO_veh13/final-viral-combined.fa 4.checkv_using3,len1000/KO_veh13/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/KO_veh14/final-viral-combined.fa 4.checkv_using3,len1000/KO_veh14/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+checkv end_to_end 3.virsorter2_using2-2,len1000/NC/final-viral-combined.fa 4.checkv_using3,len1000/NC/ -d 0.database/checkvdb-v1.3/ --remove_tmp -t 100
+
+#cat
+cat 4.checkv_using3,len1000/KO_col5/proviruses.fna 4.checkv_using3,len1000/KO_col5/viruses.fna > 4.checkv_using3,len1000/KO_col5/combined.fna
+cat 4.checkv_using3,len1000/KO_col6/proviruses.fna 4.checkv_using3,len1000/KO_col6/viruses.fna > 4.checkv_using3,len1000/KO_col6/combined.fna
+cat 4.checkv_using3,len1000/KO_col7/proviruses.fna 4.checkv_using3,len1000/KO_col7/viruses.fna > 4.checkv_using3,len1000/KO_col7/combined.fna
+cat 4.checkv_using3,len1000/KO_col8/proviruses.fna 4.checkv_using3,len1000/KO_col8/viruses.fna > 4.checkv_using3,len1000/KO_col8/combined.fna
+cat 4.checkv_using3,len1000/KO_col9/proviruses.fna 4.checkv_using3,len1000/KO_col9/viruses.fna > 4.checkv_using3,len1000/KO_col9/combined.fna
+cat 4.checkv_using3,len1000/KO_col10/proviruses.fna 4.checkv_using3,len1000/KO_col10/viruses.fna > 4.checkv_using3,len1000/KO_col10/combined.fna
+cat 4.checkv_using3,len1000/KO_col11/proviruses.fna 4.checkv_using3,len1000/KO_col11/viruses.fna > 4.checkv_using3,len1000/KO_col11/combined.fna
+cat 4.checkv_using3,len1000/KO_col15/proviruses.fna 4.checkv_using3,len1000/KO_col15/viruses.fna > 4.checkv_using3,len1000/KO_col15/combined.fna
+cat 4.checkv_using3,len1000/WT_col1/proviruses.fna 4.checkv_using3,len1000/WT_col1/viruses.fna > 4.checkv_using3,len1000/WT_col1/combined.fna
+cat 4.checkv_using3,len1000/WT_col2/proviruses.fna 4.checkv_using3,len1000/WT_col2/viruses.fna > 4.checkv_using3,len1000/WT_col2/combined.fna
+cat 4.checkv_using3,len1000/WT_col3/proviruses.fna 4.checkv_using3,len1000/WT_col3/viruses.fna > 4.checkv_using3,len1000/WT_col3/combined.fna
+cat 4.checkv_using3,len1000/WT_col6/proviruses.fna 4.checkv_using3,len1000/WT_col6/viruses.fna > 4.checkv_using3,len1000/WT_col6/combined.fna
+cat 4.checkv_using3,len1000/WT_col8/proviruses.fna 4.checkv_using3,len1000/WT_col8/viruses.fna > 4.checkv_using3,len1000/WT_col8/combined.fna
+cat 4.checkv_using3,len1000/WT_col10/proviruses.fna 4.checkv_using3,len1000/WT_col10/viruses.fna > 4.checkv_using3,len1000/WT_col10/combined.fna
+cat 4.checkv_using3,len1000/WT_col12/proviruses.fna 4.checkv_using3,len1000/WT_col12/viruses.fna > 4.checkv_using3,len1000/WT_col12/combined.fna
+cat 4.checkv_using3,len1000/WT_veh1/proviruses.fna 4.checkv_using3,len1000/WT_veh1/viruses.fna > 4.checkv_using3,len1000/WT_veh1/combined.fna
+cat 4.checkv_using3,len1000/WT_veh2/proviruses.fna 4.checkv_using3,len1000/WT_veh2/viruses.fna > 4.checkv_using3,len1000/WT_veh2/combined.fna
+cat 4.checkv_using3,len1000/WT_veh4/proviruses.fna 4.checkv_using3,len1000/WT_veh4/viruses.fna > 4.checkv_using3,len1000/WT_veh4/combined.fna
+cat 4.checkv_using3,len1000/WT_veh7/proviruses.fna 4.checkv_using3,len1000/WT_veh7/viruses.fna > 4.checkv_using3,len1000/WT_veh7/combined.fna
+cat 4.checkv_using3,len1000/WT_veh8/proviruses.fna 4.checkv_using3,len1000/WT_veh8/viruses.fna > 4.checkv_using3,len1000/WT_veh8/combined.fna
+cat 4.checkv_using3,len1000/WT_veh11/proviruses.fna 4.checkv_using3,len1000/WT_veh11/viruses.fna > 4.checkv_using3,len1000/WT_veh11/combined.fna
+cat 4.checkv_using3,len1000/WT_veh13/proviruses.fna 4.checkv_using3,len1000/WT_veh13/viruses.fna > 4.checkv_using3,len1000/WT_veh13/combined.fna
+cat 4.checkv_using3,len1000/WT_veh14/proviruses.fna 4.checkv_using3,len1000/WT_veh14/viruses.fna > 4.checkv_using3,len1000/WT_veh14/combined.fna
+cat 4.checkv_using3,len1000/KO_veh3/proviruses.fna 4.checkv_using3,len1000/KO_veh3/viruses.fna > 4.checkv_using3,len1000/KO_veh3/combined.fna
+cat 4.checkv_using3,len1000/KO_veh4/proviruses.fna 4.checkv_using3,len1000/KO_veh4/viruses.fna > 4.checkv_using3,len1000/KO_veh4/combined.fna
+cat 4.checkv_using3,len1000/KO_veh5/proviruses.fna 4.checkv_using3,len1000/KO_veh5/viruses.fna > 4.checkv_using3,len1000/KO_veh5/combined.fna
+cat 4.checkv_using3,len1000/KO_veh9/proviruses.fna 4.checkv_using3,len1000/KO_veh9/viruses.fna > 4.checkv_using3,len1000/KO_veh9/combined.fna
+cat 4.checkv_using3,len1000/KO_veh11/proviruses.fna 4.checkv_using3,len1000/KO_veh11/viruses.fna > 4.checkv_using3,len1000/KO_veh11/combined.fna
+cat 4.checkv_using3,len1000/KO_veh13/proviruses.fna 4.checkv_using3,len1000/KO_veh13/viruses.fna > 4.checkv_using3,len1000/KO_veh13/combined.fna
+cat 4.checkv_using3,len1000/KO_veh14/proviruses.fna 4.checkv_using3,len1000/KO_veh14/viruses.fna > 4.checkv_using3,len1000/KO_veh14/combined.fna
+
+
+
+
+
+
+
+
+
+
+
