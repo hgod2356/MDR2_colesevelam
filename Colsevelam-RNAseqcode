@@ -1,0 +1,687 @@
+#if (!requireNamespace("BiocManager", quietly = TRUE))
+#  install.packages("BiocManager")
+#BiocManager::install("tximeta")
+#BiocManager::install(c("tximport", "GenomicFeatures", "tximeta"))
+#BiocManager::install("BiocParallel", force = TRUE )
+#library(BiocParallel)
+#register(MulticoreParam(4))
+
+setwd("D:/Experiment (실험)/11.MDR2 KO/2.Colesevelam/RNA-seq/salmon")
+getwd()
+library(tximport)
+library(GenomicFeatures)
+txdb2 <- makeTxDbFromGFF(file="gencode.vM30.annotation.gff3.gz")
+transcripts(txdb2, columns=c("tx_id", "tx_name"))
+genes(txdb2)
+txdb2
+columns(txdb2)
+
+library(org.Mm.eg.db)
+library(tximeta)
+columns(org.Mm.eg.db)
+
+### extract gene_name in '.gff3'
+library(rtracklayer)
+aa <- import.gff3("gencode.vM30.annotation.gff3.gz") # 25s
+gene.DF <- data.frame(aa$gene_name,aa$gene_id)
+u.gene.DF<- unique(gene.DF)
+head(u.gene.DF)
+
+#enterzid.k <- keys(org.Mm.eg.db, keytype = "ENSEMBL")
+#enterzid.gene <- select(org.Mm.eg.db, enterzid.k, "ENTREZID", "ENSEMBL")
+#write.csv(as.data.frame(enterzid.gene), file = "0.ENTREZID_name_20220722.csv")
+
+### 
+k <- keys(txdb2, keytype = "TXNAME")
+tx2gene <- select(txdb2, k, "GENEID", "TXNAME")
+head(tx2gene)
+
+###
+setwd("F:/Experiment (실험)/11.MDR2 KO/2.Colesevelam/RNA-seq/salmon/quant")
+dir <- getwd()
+files = paste0(dir, "/",c("KO_Col_5","KO_Col_6","KO_Col_7","KO_Col_8","KO_Col_9","KO_Col_10","KO_Col_15",
+                          "KO_Veh_3","KO_Veh_4","KO_Veh_5","KO_Veh_9","KO_Veh_11","KO_Veh_13", "KO_Veh_14",
+                          "WT_Col_1","WT_Col_2","WT_Col_3","WT_Col_6","WT_Col_8","WT_Col_10","WT_Col_12",
+                          "WT_Veh_1","WT_Veh_2","WT_Veh_7","WT_Veh_8","WT_Veh_11","WT_Veh_14"), "/quant.sf")
+#paste0("KO_Col_", 1:13) 1씩 증가
+
+names(files) <- paste0( c("KO_Col_5","KO_Col_6","KO_Col_7","KO_Col_8","KO_Col_9","KO_Col_10","KO_Col_15",
+                          "KO_Veh_3","KO_Veh_4","KO_Veh_5","KO_Veh_9","KO_Veh_11","KO_Veh_13", "KO_Veh_14",
+                          "WT_Col_1","WT_Col_2","WT_Col_3","WT_Col_6","WT_Col_8","WT_Col_10","WT_Col_12",
+                          "WT_Veh_1","WT_Veh_2","WT_Veh_7","WT_Veh_8","WT_Veh_11","WT_Veh_14"))
+file.exists(files)
+txi.salmon <- tximport(files, type = "salmon", tx2gene = tx2gene)
+str(txi.salmon)
+head(txi.salmon$abundance)
+head(txi.salmon$counts)
+
+###
+setwd("F:/Experiment (실험)/11.MDR2 KO/2.Colesevelam/RNA-seq/salmon")
+#if (!require("BiocManager", quietly = TRUE))
+#  install.packages("BiocManager")
+#BiocManager::install("DESeq2")
+
+library(DESeq2)
+sampleTable <- data.frame(
+  condition = factor(c(rep("KO_col",7), rep("KO_veh",7), rep("WT_col",7), rep("WT_veh", 6))),
+  genotype = factor(c(rep("KO",14), rep("WT",13))),
+  treatment = factor(c(rep("colesevelam",7), rep("vehicle",7), rep("colesevelam",7), rep("vehicle",6)))
+)
+rownames(sampleTable) <- colnames(txi.salmon$counts)
+dds <- DESeqDataSetFromTximport(txi.salmon, sampleTable, ~condition)
+deseqresult <- DESeq(dds)
+deseqresult
+
+#write.csv(as.data.frame(u.gene.DF), file = "gene_name_20220720.csv")
+#write.csv(as.data.frame(txi.salmon$counts), file = "gene_count_20220720.csv")
+
+#condition1 KO_veh vs KO_col
+res01 <- results(deseqresult, contrast = c("condition","KO_veh","KO_col"))
+res01
+summary(res01)
+plotMA(res01, ylim=c(-6,6))
+#write.csv(as.data.frame(res01), file = "1.KO-vehvsKO-col_results_count_20220720.csv")
+
+#condition2 WT_veh vs WT_col
+res02 <- results(deseqresult, contrast = c("condition","WT_veh","WT_col"))
+res02
+summary(res02)
+plotMA(res02, ylim=c(-5,5))
+#write.csv(as.data.frame(res02), file = "2.WT-vehvsWT-col_results_count_20220720.csv")
+
+#condition3 WT_veh vs KO_veh
+res03 <- results(deseqresult, contrast = c("condition","WT_veh","KO_veh"))
+res03
+summary(res03)
+plotMA(res03, ylim=c(-10,10))
+#write.csv(as.data.frame(res03), file = "3.WT-vehvsKO-veh_results_count_20220720.csv")
+
+#condition4 WT_col vs KO_col
+res04 <- results(deseqresult, contrast = c("condition","WT_col","KO_col"))
+res04
+summary(res04)
+plotMA(res04, ylim=c(-10,10))
+#write.csv(as.data.frame(res04), file = "4.WT-colvsKO-col_results_count_20220720.csv")
+
+#resordered <- res[order(res$padj),]
+#summary(res)
+#res00 <- results(deseqresult)
+#log2foldchange shrunk, using addMLE in results()
+#results(deseq, addMLE = T) 
+#summary(res00)
+#res00
+#res05ordered <- res[order(res05$padj),] # pvalue < 0.1
+#summary(res05ordered)
+#res05ordered
+#write.csv(as.data.frame(res05), file = "condition_results_count_20220720.csv")
+#write.csv(as.data.frame(u.gene.DF), file = "gene_name_20220720.csv")
+#write.csv(as.data.frame(txi.salmon$counts), file = "gene_count_20220720.csv")
+#plotMA(res05, ylim=c(-2,2))
+
+#####volcanoplot1 - KO-veh vs KO-col
+res01genename <- read.csv("1.KO-vehvsKO-col_results_count_except_genename_20220727.csv", stringsAsFactors = F)
+cut_lfc <- 0.5
+cut_pvalue <- 0.05
+par(mar=c(5,5,5,5), cex=1.0, cex.main=1.4, cex.axis=1.4, cex.lab=1.4)
+topT.res01 <- as.data.frame(res01genename)
+# Adjusted P values
+with(topT.res01, plot(log2FoldChange, -log10(padj), pch=20, main="Volcano plot", col='grey', 
+                cex=1.0, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value)))
+with(subset(topT.res01, padj<cut_pvalue & log2FoldChange>cut_lfc), points(log2FoldChange, -log10(padj), pch=20, col='#228833', cex=1.5))
+with(subset(topT.res01, padj<cut_pvalue & log2FoldChange<(-cut_lfc)), points(log2FoldChange, -log10(padj), pch=20, col='#E7AC02', cex=1.5))
+## Add lines for FC and P-value cut-off
+abline(v=0, col='black', lty=3, lwd=1.0)
+abline(v=-cut_lfc, col='black', lty=4, lwd=2.0)
+abline(v=cut_lfc, col='black', lty=4, lwd=2.0)
+abline(h=-log10(max(topT.res01$padj[topT.res01$padj<cut_pvalue], na.rm=TRUE)), col='black', lty=4, lwd=2.0)
+
+# Specific gene labeling
+genes_to_label <- c("Lcn2", "Lbp", "Nfkb1", "Tnfa", "Col1a1", "Tgfa", "Cyp7a1", "Nr1h4", "Nr0b2")
+label_data <- subset(topT.res01, gene %in% genes_to_label)
+
+with(label_data, text(log2FoldChange, -log10(padj), labels=gene, pos=4, cex=1.0, col="black"))
+
+
+## labeling on volcano plot
+x.extrem.res01 <- na.omit(topT.res01[topT.res01$log2FoldChange > (10) & -log10(topT.res01$padj) > 2, ])
+y.extrem.res01 <- na.omit(topT.res01[topT.res01$log2FoldChange > 3 & -log10(topT.res01$padj) > 20, ])
+
+with(x.extrem.res01, text(log2FoldChange, -log10(padj), labels=X, pos=2, cex=0.8) )
+with(y.extrem.res01, text(log2FoldChange, -log10(padj), labels=X, pos=4, cex=0.7) )
+
+x.extrem2.res01 <- na.omit(topT.res01[topT.res01$log2FoldChange > 2 & -log10(topT.res01$padj) > 20 ,])
+y.extrem2.res01 <- na.omit(topT.res01[topT.res01$log2FoldChange > 0 & -log10(topT.res01$padj) > 20, ])
+
+with(x.extrem2.res01, text(log2FoldChange, -log10(padj), labels=X, pos=1, cex=0.7) )
+with(y.extrem2.res01, text(log2FoldChange, -log10(padj), labels=X, pos=c(4,3,2,1,1,1), cex=0.7) )
+
+
+# Volcano plot settings
+cut_lfc <- 0.5
+cut_pvalue <- 0.05
+par(mar=c(5,5,5,5), cex=1.0, cex.main=1.4, cex.axis=1.4, cex.lab=1.4)
+topT.res01 <- as.data.frame(res01genename)
+
+# Volcano plot
+with(topT.res01, plot(log2FoldChange, -log10(padj), pch=20, main="Volcano plot", col='grey', 
+                      cex=1.0, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value)))
+
+with(subset(topT.res01, padj<cut_pvalue & log2FoldChange>cut_lfc), 
+     points(log2FoldChange, -log10(padj), pch=20, col='#228833', cex=1.5))
+
+with(subset(topT.res01, padj<cut_pvalue & log2FoldChange<(-cut_lfc)), 
+     points(log2FoldChange, -log10(padj), pch=20, col='#E7AC02', cex=1.5))
+
+# Add threshold lines
+abline(v=0, col='black', lty=3, lwd=1.0)
+abline(v=-cut_lfc, col='black', lty=4, lwd=2.0)
+abline(v=cut_lfc, col='black', lty=4, lwd=2.0)
+abline(h=-log10(max(topT.res01$padj[topT.res01$padj<cut_pvalue], na.rm=TRUE)), col='black', lty=4, lwd=2.0)
+
+# Highlight specific genes
+genes_to_label <- c("Lcn2", "Lbp", "Nfkb1", "Tnfa", "Col1a1", "Tgfa")
+label_data <- subset(topT.res01, gene %in% genes_to_label)
+
+# Annotate genes with arrows and labels
+for (i in 1:nrow(label_data)) {
+  gene_x <- label_data$log2FoldChange[i]
+  gene_y <- -log10(label_data$padj[i])
+  
+  # Adjust label positions dynamically
+  if (gene_x > 0) {
+    text_x <- gene_x + 2.5  # Shift label to the right
+    text_y <- gene_y + 2.5    # Shift label slightly upward
+  } else {
+    text_x <- gene_x - 0.5  # Shift label to the left
+    text_y <- gene_y + 2    # Shift label slightly upward
+  }
+  
+  # Add arrow
+  arrows(gene_x, gene_y, text_x, text_y - 1, col="black", length=0.1, lwd=1.5)
+  
+  # Add label
+  text(text_x, text_y, labels=label_data$gene[i], cex=1.0, col="black")
+}
+
+
+#####volcanoplot2 - WT-veh vs WT-col
+res02genename <- read.csv("2.WT-vehvsWT-col_results_count_genename_20220720.csv", stringsAsFactors = F)
+cut_lfc <- 0.5
+cut_pvalue <- 0.05
+par(mar=c(5,5,5,5), cex=1.0, cex.main=1.4, cex.axis=1.4, cex.lab=1.4)
+topT.res02 <- as.data.frame(res02genename)
+# Adjusted P values
+with(topT.res02, plot(log2FoldChange, -log10(padj), pch=20, main="Volcano plot", col='grey', 
+                cex=1.0, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value)))
+with(subset(topT.res02, padj<cut_pvalue & log2FoldChange>cut_lfc), points(log2FoldChange, -log10(padj), pch=20, col='firebrick1', cex=1.5))
+with(subset(topT.res02, padj<cut_pvalue & log2FoldChange<(-cut_lfc)), points(log2FoldChange, -log10(padj), pch=20, col='dodgerblue', cex=1.5))
+## Add lines for FC and P-value cut-off
+abline(v=0, col='black', lty=3, lwd=1.0)
+abline(v=-cut_lfc, col='black', lty=4, lwd=2.0)
+abline(v=cut_lfc, col='black', lty=4, lwd=2.0)
+abline(h=-log10(max(topT.res02$padj[topT.res02$padj<cut_pvalue], na.rm=TRUE)), col='black', lty=4, lwd=2.0)
+## labeling on volcano plot
+x.extrem.res02 <- na.omit(topT.res02[topT.res02$log2FoldChange < (-4) & -log10(topT.res02$padj) > 2, ])
+y.extrem.res02 <- na.omit(topT.res02[topT.res02$log2FoldChange < 0 & -log10(topT.res02$padj) > 16, ])
+
+with(x.extrem.res02, text(log2FoldChange, -log10(padj), labels=X, pos=3, cex=0.7) )
+with(y.extrem.res02, text(log2FoldChange, -log10(padj), labels=X, pos=c(3,2,2,2,3), cex=0.7) )
+
+x.extrem2.res02 <- na.omit(topT.res02[topT.res02$log2FoldChange > 10 ,])
+y.extrem2.res02 <- na.omit(topT.res02[topT.res02$log2FoldChange > 0 & -log10(topT.res02$padj) > 16, ])
+
+with(x.extrem2.res02, text(log2FoldChange, -log10(padj), labels=X, pos=3, cex=0.7) )
+with(y.extrem2.res02, text(log2FoldChange, -log10(padj), labels=X, pos=c(3,3,1), cex=0.7) )
+
+
+#####volcanoplot3 - WT-veh vs KO-veh
+res03genename <- read.csv("3.WT-vehvsKO-veh_results_count_genename_20220720.csv", stringsAsFactors = F)
+cut_lfc <- 0.5
+cut_pvalue <- 0.05
+par(mar=c(5,5,5,5), cex=1.0, cex.main=1.4, cex.axis=1.4, cex.lab=1.4)
+topT.res03 <- as.data.frame(res03genename)
+# Adjusted P values
+with(topT.res03, plot(log2FoldChange, -log10(padj), pch=20, main="Volcano plot", col='grey', 
+                cex=1.0, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value)))
+with(subset(topT.res03, padj<cut_pvalue & log2FoldChange>cut_lfc), points(log2FoldChange, -log10(padj), pch=20, col='firebrick1', cex=1.5))
+with(subset(topT.res03, padj<cut_pvalue & log2FoldChange<(-cut_lfc)), points(log2FoldChange, -log10(padj), pch=20, col='dodgerblue', cex=1.5))
+## Add lines for FC and P-value cut-off
+abline(v=0, col='black', lty=3, lwd=1.0)
+abline(v=-cut_lfc, col='black', lty=4, lwd=2.0)
+abline(v=cut_lfc, col='black', lty=4, lwd=2.0)
+abline(h=-log10(max(topT.res03$padj[topT.res03$padj<cut_pvalue], na.rm=TRUE)), col='black', lty=4, lwd=2.0)
+## labeling on volcano plot
+x.extrem.res03 <- na.omit(topT.res03[topT.res03$log2FoldChange < (-9) & -log10(topT.res03$padj) > 2, ])
+y.extrem.res03 <- na.omit(topT.res03[topT.res03$log2FoldChange < 0 & -log10(topT.res03$padj) > 80, ])
+
+with(x.extrem.res03, text(log2FoldChange, -log10(padj), labels=X, pos=c(3,2,3,1), cex=0.7) )
+with(y.extrem.res03, text(log2FoldChange, -log10(padj), labels=X, pos=c(3,3,1,1,3,3,4,3,1), cex=0.7) )
+
+x.extrem2.res03 <- na.omit(topT.res03[topT.res03$log2FoldChange > 7 ,])
+y.extrem2.res03 <- na.omit(topT.res03[topT.res03$log2FoldChange > 0 & -log10(topT.res03$padj) > 50, ])
+
+with(x.extrem2.res03, text(log2FoldChange, -log10(padj), labels=X, pos=3, cex=0.7) )
+with(y.extrem2.res03, text(log2FoldChange, -log10(padj), labels=X, pos=c(3,3,4), cex=0.7) )
+
+#####volcanoplot4 - WT-col vs KO-col
+res04genename <- read.csv("4.WT-colvsKO-col_results_count_genename_20220720.csv", stringsAsFactors = F)
+cut_lfc <- 0.5
+cut_pvalue <- 0.05
+par(mar=c(5,5,5,5), cex=1.0, cex.main=1.4, cex.axis=1.4, cex.lab=1.4)
+topT.res04 <- as.data.frame(res04genename)
+# Adjusted P value
+with(topT.res04, plot(log2FoldChange, -log10(padj), pch=20, main="Volcano plot", col='grey', 
+                cex=1.0, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value)))
+with(subset(topT.res04, padj<cut_pvalue & log2FoldChange>cut_lfc), points(log2FoldChange, -log10(padj),
+                                                                    pch=20, col='firebrick1', cex=1.5))
+with(subset(topT.res04, padj<cut_pvalue & log2FoldChange<(-cut_lfc)), points(log2FoldChange, -log10(padj), 
+                                                                       pch=20, col='dodgerblue', cex=1.5))
+## Add lines for FC and P-value cut-off
+abline(v=0, col='black', lty=3, lwd=1.0)
+abline(v=-cut_lfc, col='black', lty=4, lwd=2.0)
+abline(v=cut_lfc, col='black', lty=4, lwd=2.0)
+abline(h=-log10(max(topT.res04$padj[topT.res04$padj<cut_pvalue], na.rm=TRUE)), col='black', lty=4, lwd=2.0)
+
+## labeling on volcano plot
+x.extrem.res04 <- na.omit(topT.res04[topT.res04$log2FoldChange < (-8) ,])
+y.extrem.res04 <- na.omit(topT.res04[topT.res04$log2FoldChange < 0 & -log10(topT.res04$padj) > 47, ])
+
+with(x.extrem.res04, text(log2FoldChange, -log10(padj), labels=X, pos=c(3,2,4,4), cex=0.7) )
+with(y.extrem.res04, text(log2FoldChange, -log10(padj), labels=X, pos=c(2,1,4,2,3,4), cex=0.7) )
+
+#sort(as.vector(na.omit((-log10(topT$padj))[ topT$log2FoldChange >0  &  -log10(topT$padj) > 20 ])))
+
+x.extrem2.res04 <- na.omit(topT.res04[topT.res04$log2FoldChange > 5 & topT.res04$padj < 0.05,])
+y.extrem2.res04 <- na.omit(topT.res04[topT.res04$log2FoldChange > 0 & -log10(topT.res04$padj) > 30, ])
+
+with(x.extrem2.res04, text(log2FoldChange, -log10(padj), labels=X, pos=3, cex=0.7) )
+with(y.extrem2.res04, text(log2FoldChange, -log10(padj), labels=X, pos=3, cex=0.7) )
+
+
+##volcanoplot genename
+#temp.genea <- topT[topT$genename == "Nos2" |topT$genename == "Hif1a" |topT$genename == "Cxcl9" |topT$genename == "Ldha" |topT$genename == "Ccl5" |topT$genename == "Stat1",]
+#temp.gene <- topT[topT$genename == "Nos2", ]
+#temp.gene2 <- topT[topT$genename == "Hif1a", ]
+#temp.gene3 <- topT[topT$genename == "Cxcl9", ]
+#temp.gene4 <- topT[topT$genename == "Ldha", ]
+#temp.gene5 <- topT[topT$genename == "Ccl5", ]
+#temp.gene6 <- topT[topT$genename == "Stat1", ]
+
+#text(temp.genea$log2FoldChange + 5, -log10(temp.genea$padj) +13, labels=temp.genea$genename)
+
+#segments(temp.genea$log2FoldChange, -log10(temp.genea$padj),
+#         temp.genea$log2FoldChange + 5, -log10(temp.genea$padj)+10,
+#         lty=1, lwd=2, col="black"
+#)
+#points(temp.gene$log2FoldChange, -log10(temp.gene$padj),  pch=21, bg="green", cex=1.2)
+#points(temp.gene2$log2FoldChange, -log10(temp.gene2$padj),  pch=21, bg="green", cex=1.2)
+#points(temp.gene3$log2FoldChange, -log10(temp.gene3$padj),  pch=21, bg="green", cex=1.2)
+#points(temp.gene4$log2FoldChange, -log10(temp.gene4$padj),  pch=21, bg="green", cex=1.2)
+#points(temp.gene5$log2FoldChange, -log10(temp.gene5$padj),  pch=21, bg="green", cex=1.2)
+#points(temp.gene6$log2FoldChange, -log10(temp.gene6$padj),  pch=21, bg="green", cex=1.2)
+
+##enhanced volcanoplot
+#BiocManager::install('EnhancedVolcano')
+#library(EnhancedVolcano)
+#EnhancedVolcano(res,
+#                lab = rownames(res),
+#                x = 'log2FoldChange',
+#                y = 'pvalue')
+#
+
+#Extracting transformed values - vst, rlog, ntd
+vsd <- vst(deseqresult, blind = "False")
+rld <- rlog(deseqresult, blind=FALSE)
+ntd <- normTransform(deseqresult)
+head(assay(vsd), 3)
+head(assay(rld), 3)
+head(assay(ntd), 3)
+
+
+#Pca plot
+colData(vsd)
+par(mar=c(4,4,3,3))
+plotPCA(vsd, intgroup = c("condition"))
+plotPCA(rld, intgroup = c("condition"))
+plotPCA(ntd, intgroup = c("condition"))
+
+#### PCA in basic plot
+#ntop =500
+#intgroup = c("condition")
+#rv <- rowVars(assay(vsd))
+#select2 <- order(rv, decreasing=TRUE)[seq_len(min(ntop, length(rv)))]
+## perform a PCA on the data in assay(x) for the selected genes
+#pca <- prcomp(t(assay(vsd)[select2,]))
+#percentVar <- pca$sdev^2 / sum( pca$sdev^2 )
+#intgroup.df <- as.data.frame(colData(vsd)[, "condition", drop=FALSE])
+#
+#group <- if (length(intgroup) > 1) {
+#  factor(apply( intgroup.df, 1, paste, collapse=":"))
+#} else {
+#  colData(vsd)[[intgroup]]
+#}
+#d <- data.frame(PC1=pca$x[,1], PC2=pca$x[,2], group=group, intgroup.df, 
+#                name=colnames(vsd))
+#plot(d[1:2], type="n", xlim=c(-20,25), ylim=c(-20,10), 
+#     xlab = paste0("PC1: ",round(percentVar[1] * 100),"% variance"),
+#     ylab = paste0("PC2: ",round(percentVar[2] * 100),"% variance")
+#)
+#grid()
+#abline(h=0, v=0, lty=3)
+#points(d[1:2], pch=21, bg=c("#ffa040", "#c000c0")[d$group], cex=2)
+#text(d[,1], d[,2]+0.5, labels = d$name, pos=3)
+
+#Heatmap
+library(pheatmap)
+library(RColorBrewer)
+coul <- colorRampPalette(c("black","darkblue","blue","cyan","chartreuse","gold","darkorange","red","firebrick"))(50)
+plot(1:length(coul), rep(1,length(coul)), col=coul, pch=19, cex=10,)
+
+#select <- order(rowMeans(counts(deseqresult,normalized=TRUE)),
+#                decreasing=TRUE)[1:1000]
+#select <- order(rowMeans(counts(deseqresult,normalized=TRUE)),
+#                decreasing=TRUE)[1:20]
+#df <- as.data.frame(colData(deseqresult)[,c("condition", "genotype")])
+#rownames(df) <- colnames(deseqresult)
+#colnames(df) <- paste0("condition")
+#pheatmap(assay(ntd)[select,], cluster_rows=FALSE, show_rownames=FALSE,
+#         cluster_cols=FALSE, annotation_col=df)
+
+### matching gene name using all 4group
+head(u.gene.DF)
+g.t.DF <- data.frame("aa.gene_id" = rownames(assay(ntd)))
+matching.g.name <- merge(g.t.DF,u.gene.DF, by= "aa.gene_id")
+dim(g.t.DF)
+dim(matching.g.name)
+matching.g.name
+table(rownames(assay(ntd)) == matching.g.name$aa.gene_id) # must have all true
+a.ntd2 <- assay(ntd)
+#write.csv(a.ntd2, file = "ntdform_genecount_20220720.csv")
+
+rownames(a.ntd2)<- matching.g.name$aa.gene_name
+
+table(matching.g.name$aa.gene_id == names(rowMeans(counts(deseqresult, normalized=TRUE))))  # must have all true
+
+select <- order(rowMeans(counts(deseqresult, normalized=TRUE)), decreasing=T)[1:100] #값 수정시 gene개수 늘어남
+
+#df <- as.data.frame(colData(deseqresult)[,c("condition")])
+df <- as.data.frame(colData(deseqresult)[,c("condition", "genotype")])
+
+pheatmap(a.ntd2[select,], cluster_rows=T, show_rownames=T, cluster_cols=T, annotation_col=df)
+
+
+### DS mt-를 제외하기
+# 1. DF 
+select.all <- order(rowMeans(counts(deseqresult, normalized=TRUE)), decreasing=T)
+length(select.all)
+
+a.ntd3 <- a.ntd2[select.all, ]
+head(a.ntd3)
+rownames(a.ntd3)[grep("mt-",rownames(a.ntd3))]
+
+a.ntd4 <- a.ntd3[-grep("mt-",rownames(a.ntd3)), ]
+dim(a.ntd4)
+
+pheatmap(a.ntd4[1:10,], cluster_rows=T, show_rownames=T, cluster_cols=T, annotation_col=df)
+pheatmap(a.ntd4[1:100,], cluster_rows=T, show_rownames=T, cluster_cols=T, annotation_col=df)
+pheatmap(a.ntd4[1:150,], cluster_rows=T, show_rownames=T, cluster_cols=T, annotation_col=df)
+pheatmap(a.ntd4[1:130,], cluster_rows=T, show_rownames=T, cluster_cols=T, annotation_col=df)
+
+## plot for selected gene (JY)
+inflammation.gene.selected.jy  <- read.csv("Inflammation gene list and count.csv", header=T, stringsAsFactors = F)
+head(inflammation.gene.selected.jy)
+row.names(inflammation.gene.selected.jy) <- inflammation.gene.selected.jy$Inflammation.gene.name
+inflammation.gene.selected.jy <- inflammation.gene.selected.jy[,-1]
+
+inflammation.gene.selected2.jy<- na.omit(inflammation.gene.selected.jy)
+order(inflammation.gene.selected2.jy)
+matrix.inflammation.gene.selected2.jy <-data.matrix((inflammation.gene.selected2.jy))
+
+pheatmap(matrix.inflammation.gene.selected2.jy, cluster_rows=T, show_rownames=T,  # cluster_rows=F
+         cluster_cols=T, annotation_col=,)
+
+##KEGG - Juneyoung
+#BiocManager::install(c("gage","GO.db","AnnotationDbi","org.Mm.eg.db"))
+library(gage)
+kg.mmu <- kegg.gsets(species="mmu")
+kegg.sigmet.gs <- kg.mmu$kg.sets[kg.mmu$sigmet.idx]
+kegg.dise.gs <- kg.mmu$kg.sets[kg.mmu$dise.idx]
+# set up go database
+go.mmu <- go.gsets(species="mouse")
+go.bp.gs <- go.mmu$go.sets[go.mmu$go.subs$BP]
+go.mf.gs <- go.mmu$go.sets[go.mmu$go.subs$MF]
+go.cc.gs <- go.mmu$go.sets[go.mmu$go.subs$CC]
+
+#https://www.hadriengourle.com/tutorials/rna/
+res01.name<- gsub("\\..*","",row.names(res01))
+row.names(res01) <- res01.name
+
+res02.name<- gsub("\\..*","",row.names(res02))
+row.names(res02) <- res02.name
+
+res03.name<- gsub("\\..*","",row.names(res03))
+row.names(res03) <- res03.name
+
+res04.name<- gsub("\\..*","",row.names(res04))
+row.names(res04) <- res04.name
+
+
+res01$symbol <- mapIds(org.Mm.eg.db, keys=row.names(res01), column="SYMBOL", keytype="ENSEMBL", multiVals="first")
+res01$entrez <- mapIds(org.Mm.eg.db, keys=row.names(res01), column="ENTREZID", keytype="ENSEMBL", multiVals="first")
+res01$name <- mapIds(org.Mm.eg.db, keys=row.names(res01), column="GENENAME",keytype="ENSEMBL",  multiVals="first")
+
+res02$symbol <- mapIds(org.Mm.eg.db, keys=row.names(res02), column="SYMBOL", keytype="ENSEMBL", multiVals="first")
+res02$entrez <- mapIds(org.Mm.eg.db, keys=row.names(res02), column="ENTREZID", keytype="ENSEMBL", multiVals="first")
+res02$name <- mapIds(org.Mm.eg.db, keys=row.names(res02), column="GENENAME",keytype="ENSEMBL",  multiVals="first")
+
+res03$symbol <- mapIds(org.Mm.eg.db, keys=row.names(res03), column="SYMBOL", keytype="ENSEMBL", multiVals="first")
+res03$entrez <- mapIds(org.Mm.eg.db, keys=row.names(res03), column="ENTREZID", keytype="ENSEMBL", multiVals="first")
+res03$name <- mapIds(org.Mm.eg.db, keys=row.names(res03), column="GENENAME",keytype="ENSEMBL",  multiVals="first")
+
+res04$symbol <- mapIds(org.Mm.eg.db, keys=row.names(res04), column="SYMBOL", keytype="ENSEMBL", multiVals="first")
+res04$entrez <- mapIds(org.Mm.eg.db, keys=row.names(res04), column="ENTREZID", keytype="ENSEMBL", multiVals="first")
+res04$name <- mapIds(org.Mm.eg.db, keys=row.names(res04), column="GENENAME",keytype="ENSEMBL",  multiVals="first")
+
+res01.fixna = na.omit(res01)
+res02.fixna = na.omit(res02)
+res03.fixna = na.omit(res03)
+res04.fixna = na.omit(res04)
+
+# grab the log fold changes for everything
+res01.fixna.fc <- res01.fixna$log2FoldChange #KO_veh vs KO_col
+res02.fixna.fc <- res02.fixna$log2FoldChange #WT_veh vs WT_col
+res03.fixna.fc <- res03.fixna$log2FoldChange #WT_veh vs KO_veh
+res04.fixna.fc <- res04.fixna$log2FoldChange #WT_col vs KO_col
+
+names(res01.fixna.fc) <- res01.fixna$entrez #KO_veh vs KO_col
+names(res02.fixna.fc) <- res02.fixna$entrez #WT_veh vs WT_col
+names(res03.fixna.fc) <- res03.fixna$entrez #WT_veh vs KO_veh
+names(res04.fixna.fc) <- res04.fixna$entrez #WT_col vs KO_col
+
+# Run enrichment analysis on all log fc - res01 - 이렇게 할경우 greater가 모두 q.value 1로 나옴.
+#all : gsets = c(sigmet.idx,dise.idx)
+
+fc.kegg.sigmet.p.res01 <- gage(res01.fixna.fc, gsets = kegg.sigmet.gs, compare="unpaired", use.fold=T, rank.test=T, same.dir = TRUE) #sigaling and metabolism
+fc.kegg.dise.p.res01 <- gage(res01.fixna.fc, gsets = kegg.dise.gs, compare="unpaired", use.fold=T, rank.test=T, same.dir = TRUE) # disease
+fc.go.bp.p.res01 <- gage(res01.fixna.fc, gsets = go.bp.gs, compare="unpaired", use.fold=T, rank.test=T) #biological process
+fc.go.mf.p.res01 <- gage(res01.fixna.fc, gsets = go.mf.gs, compare="unpaired", use.fold=T, rank.test=T) #molecular function
+fc.go.cc.p.res01 <- gage(res01.fixna.fc, gsets = go.cc.gs, compare="unpaired", use.fold=T, rank.test=T) #cellular component
+
+fc.kegg.sigmet.p.res02 <- gage(res02.fixna.fc, gsets = kegg.sigmet.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.kegg.dise.p.res02 <- gage(res02.fixna.fc, gsets = kegg.dise.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.bp.p.res02 <- gage(res02.fixna.fc, gsets = go.bp.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.mf.p.res02 <- gage(res02.fixna.fc, gsets = go.mf.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.cc.p.res02 <- gage(res02.fixna.fc, gsets = go.cc.gs, compare="unpaired", use.fold=T, rank.test=T)
+
+fc.kegg.sigmet.p.res03 <- gage(res03.fixna.fc, gsets = kegg.sigmet.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.kegg.dise.p.res03 <- gage(res03.fixna.fc, gsets = kegg.dise.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.bp.p.res03 <- gage(res03.fixna.fc, gsets = go.bp.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.mf.p.res03 <- gage(res03.fixna.fc, gsets = go.mf.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.cc.p.res03 <- gage(res03.fixna.fc, gsets = go.cc.gs, compare="unpaired", use.fold=T, rank.test=T)
+
+fc.kegg.sigmet.p.res04 <- gage(res04.fixna.fc, gsets = kegg.sigmet.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.kegg.dise.p.res04 <- gage(res04.fixna.fc, gsets = kegg.dise.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.bp.p.res04 <- gage(res04.fixna.fc, gsets = go.bp.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.mf.p.res04 <- gage(res04.fixna.fc, gsets = go.mf.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.cc.p.res04 <- gage(res04.fixna.fc, gsets = go.cc.gs, compare="unpaired", use.fold=T, rank.test=T)
+
+
+#sigGeneSet(fc.kegg.sigmet.p.res01, cutoff=0.1, qpval="q.val", heatmap=T, pdf.size=c(14, 14), cexRow=0.6, cexCol = 0.6)
+fc.kegg.sigmet.p.res01.sig<-sigGeneSet(fc.kegg.sigmet.p.res01, cutoff=0.1, qpval="q.val", heatmap=F, pdf.size=c(14, 14), 
+                                       cexRow=0.6, cexCol = 0.6, outname = "fc.kegg.sigmet.p.res01.sig")
+
+
+#Get the pathways 
+#BiocManager::install("pathview")
+library(pathview)
+class(fc.kegg.sigmet.p.res01)
+rownames(fc.kegg.sigmet.p.res01)
+fc.kegg.sigmet.p.res01[grepl("mmu04668", rownames(fc.kegg.sigmet.p.res01), fixed=TRUE),]
+pathview(gene.data=res01genename.fc, species="mmu", pathway.id="mmu04668")
+
+
+# grab the log fold changes for everything
+res01genename.fc <- res01enterzid.fix.na$log2FoldChange #KO_veh vs KO_col
+res02genename.fc <- res02enterzid.fix.na$log2FoldChange #WT_veh vs WT_col
+res03genename.fc <- res03enterzid.fix.na$log2FoldChange #WT_veh vs KO_veh
+res04genename.fc <- res04enterzid.fix.na$log2FoldChange #WT_col vs KO_col
+
+names(res01genename.fc) <- res01enterzid.fix.na$Enterzid #KO_veh vs KO_col
+names(res02genename.fc) <- res02enterzid.fix.na$Enterzid #WT_veh vs WT_col
+names(res03genename.fc) <- res03enterzid.fix.na$Enterzid #WT_veh vs KO_veh
+names(res04genename.fc) <- res04enterzid.fix.na$Enterzid #WT_col vs KO_col
+
+# Run enrichment analysis on all log fc - res01genename 
+#all : gsets = c(sigmet.idx,dise.idx)
+#lapply(fc.kegg.sigmet.p.res01, head)
+fc.kegg.sigmet.p.res01.genename.ex <- gage(res01genename.fc, gsets = kegg.sigmet.gs, compare="unpaired", use.fold=T, rank.test=T) #sigaling and metabolism
+fc.kegg.dise.p.res01.genename.ex <- gage(res01genename.fc, gsets = kegg.dise.gs, compare="unpaired", use.fold=T, rank.test=T) # disease
+fc.go.bp.p.res01.genename.ex <- gage(res01genename.fc, gsets = go.bp.gs, compare="unpaired", use.fold=T, rank.test=T) #biological process
+fc.go.mf.p.res01.genename.ex <- gage(res01genename.fc, gsets = go.mf.gs, compare="unpaired", use.fold=T, rank.test=T) #molecular function
+fc.go.cc.p.res01.genename.ex <- gage(res01genename.fc, gsets = go.cc.gs, compare="unpaired", use.fold=T, rank.test=T) #cellular component
+
+fc.kegg.sigmet.p.res02.genename.ex <- gage(res02genename.fc, gsets = kegg.sigmet.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.kegg.dise.p.res02.genename.ex <- gage(res02genename.fc, gsets = kegg.dise.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.bp.p.res02.genename.ex <- gage(res02genename.fc, gsets = go.bp.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.mf.p.res0.genename2.ex <- gage(res02genename.fc, gsets = go.mf.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.cc.p.res02.genename.ex <- gage(res02genename.fc, gsets = go.cc.gs, compare="unpaired", use.fold=T, rank.test=T)
+
+fc.kegg.sigmet.p.res03.genename.ex <- gage(res03genename.fc, gsets = kegg.sigmet.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.kegg.dise.p.res03.genename.ex <- gage(res03genename.fc, gsets = kegg.dise.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.bp.p.res03.genename.ex <- gage(res03genename.fc, gsets = go.bp.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.mf.p.res03.genename.ex <- gage(res03genename.fc, gsets = go.mf.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.cc.p.res03.genename.ex <- gage(res03genename.fc, gsets = go.cc.gs, compare="unpaired", use.fold=T, rank.test=T)
+
+fc.kegg.sigmet.p.res04.genename.ex <- gage(res04genename.fc, gsets = kegg.sigmet.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.kegg.dise.p.res04.genename.ex <- gage(res04genename.fc, gsets = kegg.dise.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.bp.p.res04.genename.ex <- gage(res04genename.fc, gsets = go.bp.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.mf.p.res04.genename.ex <- gage(res04genename.fc, gsets = go.mf.gs, compare="unpaired", use.fold=T, rank.test=T)
+fc.go.cc.p.res04.genename.ex <- gage(res04genename.fc, gsets = go.cc.gs, compare="unpaired", use.fold=T, rank.test=T)
+
+# Output data
+#write.table(rbind(fc.kegg.sigmet.p.res01$greater, fc.kegg.sigmet.p.res01$less), file = "kegg.sigmet.p.res01.txt", sep="\t", row.names = TRUE)
+
+# covert the kegg results to data frames
+fc.kegg.sigmet.p.up.res01 <- as.data.frame(fc.kegg.sigmet.p.res01$greater)
+fc.kegg.dise.p.up.res01 <- as.data.frame(fc.kegg.dise.p.res01$greater)
+
+fc.kegg.sigmet.p.down.res01 <- as.data.frame(fc.kegg.sigmet.p.res01$less)
+fc.kegg.dise.p.down.res01 <- as.data.frame(fc.kegg.dise.p.res01$less)
+
+fc.kegg.sigmet.p.up.res02 <- as.data.frame(fc.kegg.sigmet.p.res02$greater)
+fc.kegg.dise.p.up.res02 <- as.data.frame(fc.kegg.dise.p.res02$greater)
+
+fc.kegg.sigmet.p.down.res02 <- as.data.frame(fc.kegg.sigmet.p.res02$less)
+fc.kegg.dise.p.down.res02 <- as.data.frame(fc.kegg.dise.p.res02$less)
+
+fc.kegg.sigmet.p.up.res03 <- as.data.frame(fc.kegg.sigmet.p.res03$greater)
+fc.kegg.dise.p.up.res03 <- as.data.frame(fc.kegg.dise.p.res03$greater)
+
+fc.kegg.sigmet.p.down.res03 <- as.data.frame(fc.kegg.sigmet.p.res03$less)
+fc.kegg.dise.p.down.res03 <- as.data.frame(fc.kegg.dise.p.res03$less)
+
+fc.kegg.sigmet.p.up.res04 <- as.data.frame(fc.kegg.sigmet.p.res04$greater)
+fc.kegg.dise.p.up.res04 <- as.data.frame(fc.kegg.dise.p.res04$greater)
+
+fc.kegg.sigmet.p.down.res04 <- as.data.frame(fc.kegg.sigmet.p.res04$less)
+fc.kegg.dise.p.down.res04 <- as.data.frame(fc.kegg.dise.p.res04$less)
+
+#KO_veh vs KO_col
+#WT_veh vs WT_col
+#WT_veh vs KO_veh
+#WT_col vs KO_col
+
+write.csv(fc.kegg.sigmet.p.up.res01, file = "KEGG/1.fc.kegg.sigmet.p.up.res01.csv")
+write.csv(fc.kegg.dise.p.up.res01, file = "KEGG/1.fc.kegg.dise.p.up.res01.csv")
+write.csv(fc.kegg.sigmet.p.down.res01, file = "KEGG/1.fc.kegg.sigmet.p.down.res01.csv")
+write.csv(fc.kegg.dise.p.down.res01, file = "KEGG/1.fc.kegg.dise.p.down.res01.csv")
+write.csv(fc.kegg.sigmet.p.up.res02, file = "KEGG/2.fc.kegg.sigmet.p.up.res02.csv")
+write.csv(fc.kegg.dise.p.up.res02, file = "KEGG/2.fc.kegg.dise.p.up.res02.csv")
+write.csv(fc.kegg.sigmet.p.down.res02, file = "KEGG/2.fc.kegg.sigmet.p.down.res02.csv")
+write.csv(fc.kegg.dise.p.down.res02, file = "KEGG/2.fc.kegg.dise.p.down.res02.csv")
+write.csv(fc.kegg.sigmet.p.up.res03, file = "KEGG/3.fc.kegg.sigmet.p.up.res03.csv")
+write.csv(fc.kegg.dise.p.up.res03, file = "KEGG/3.fc.kegg.dise.p.up.res03.csv")
+write.csv(fc.kegg.sigmet.p.down.res03, file = "KEGG/3.fc.kegg.sigmet.p.down.res03.csv")
+write.csv(fc.kegg.dise.p.down.res03, file = "KEGG/3.fc.kegg.dise.p.down.res03.csv")
+write.csv(fc.kegg.sigmet.p.up.res04, file = "KEGG/4.fc.kegg.sigmet.p.up.res04.csv")
+write.csv(fc.kegg.dise.p.up.res04, file = "KEGG/4.fc.kegg.dise.p.up.res04.csv")
+write.csv(fc.kegg.sigmet.p.down.res04, file = "KEGG/4.fc.kegg.sigmet.p.down.res04.csv")
+write.csv(fc.kegg.dise.p.down.res04, file = "KEGG/4.fc.kegg.dise.p.down.res04.csv")
+
+
+# convert the go results to data frames
+fc.go.bp.p.up.res01   <- as.data.frame(fc.go.bp.p.res01$greater)
+fc.go.mf.p.up.res01   <- as.data.frame(fc.go.mf.p.res01$greater)
+fc.go.cc.p.up.res01   <- as.data.frame(fc.go.cc.p.res01$greater)
+fc.go.bp.p.down.res01 <- as.data.frame(fc.go.bp.p.res01$less)
+fc.go.mf.p.down.res01 <- as.data.frame(fc.go.mf.p.res01$less)
+fc.go.cc.p.down.res01 <- as.data.frame(fc.go.cc.p.res01$less)
+
+write.csv(fc.go.bp.p.up.res01  , file = "Pathway_GO term/1.fc.go.bp.p.up.res01.csv")
+write.csv(fc.go.mf.p.up.res01  , file = "Pathway_GO term/1.fc.go.mf.p.up.res01.csv")
+write.csv(fc.go.cc.p.up.res01  , file = "Pathway_GO term/1.fc.go.cc.p.up.res01.csv")
+write.csv(fc.go.bp.p.down.res01, file = "Pathway_GO term/1.fc.go.bp.p.down.res01.csv")
+write.csv(fc.go.mf.p.down.res01, file = "Pathway_GO term/1.fc.go.mf.p.down.res01.csv")
+write.csv(fc.go.cc.p.down.res01, file = "Pathway_GO term/1.fc.go.cc.p.down.res01.csv")
+
+fc.go.bp.p.up.res02   <- as.data.frame(fc.go.bp.p.res02$greater)
+fc.go.mf.p.up.res02   <- as.data.frame(fc.go.mf.p.res02$greater)
+fc.go.cc.p.up.res02   <- as.data.frame(fc.go.cc.p.res02$greater)
+fc.go.bp.p.down.res02 <- as.data.frame(fc.go.bp.p.res02$less)
+fc.go.mf.p.down.res02 <- as.data.frame(fc.go.mf.p.res02$less)
+fc.go.cc.p.down.res02 <- as.data.frame(fc.go.cc.p.res02$less)
+
+write.csv(fc.go.bp.p.up.res02  , file = "Pathway_GO term/2.fc.go.bp.p.up.res02.csv")
+write.csv(fc.go.mf.p.up.res02  , file = "Pathway_GO term/2.fc.go.mf.p.up.res02.csv")
+write.csv(fc.go.cc.p.up.res02  , file = "Pathway_GO term/2.fc.go.cc.p.up.res02.csv")
+write.csv(fc.go.bp.p.down.res02, file = "Pathway_GO term/2.fc.go.bp.p.down.res02.csv")
+write.csv(fc.go.mf.p.down.res02, file = "Pathway_GO term/2.fc.go.mf.p.down.res02.csv")
+write.csv(fc.go.cc.p.down.res02, file = "Pathway_GO term/2.fc.go.cc.p.down.res02.csv")
+
+fc.go.bp.p.up.res03   <- as.data.frame(fc.go.bp.p.res03$greater)
+fc.go.mf.p.up.res03   <- as.data.frame(fc.go.mf.p.res03$greater)
+fc.go.cc.p.up.res03   <- as.data.frame(fc.go.cc.p.res03$greater)
+fc.go.bp.p.down.res03 <- as.data.frame(fc.go.bp.p.res03$less)
+fc.go.mf.p.down.res03 <- as.data.frame(fc.go.mf.p.res03$less)
+fc.go.cc.p.down.res03 <- as.data.frame(fc.go.cc.p.res03$less)
+
+write.csv(fc.go.bp.p.up.res03  , file = "Pathway_GO term/3.fc.go.bp.p.up.res03.csv")
+write.csv(fc.go.mf.p.up.res03  , file = "Pathway_GO term/3.fc.go.mf.p.up.res03.csv")
+write.csv(fc.go.cc.p.up.res03  , file = "Pathway_GO term/3.fc.go.cc.p.up.res03.csv")
+write.csv(fc.go.bp.p.down.res03, file = "Pathway_GO term/3.fc.go.bp.p.down.res03.csv")
+write.csv(fc.go.mf.p.down.res03, file = "Pathway_GO term/3.fc.go.mf.p.down.res03.csv")
+write.csv(fc.go.cc.p.down.res03, file = "Pathway_GO term/3.fc.go.cc.p.down.res03.csv")
+
+fc.go.bp.p.up.res04   <- as.data.frame(fc.go.bp.p.res04$greater)
+fc.go.mf.p.up.res04   <- as.data.frame(fc.go.mf.p.res04$greater)
+fc.go.cc.p.up.res04   <- as.data.frame(fc.go.cc.p.res04$greater)
+fc.go.bp.p.down.res04 <- as.data.frame(fc.go.bp.p.res04$less)
+fc.go.mf.p.down.res04 <- as.data.frame(fc.go.mf.p.res04$less)
+fc.go.cc.p.down.res04 <- as.data.frame(fc.go.cc.p.res04$less)
+
+write.csv(fc.go.bp.p.up.res04  , file = "Pathway_GO term/4.fc.go.bp.p.up.res04.csv")
+write.csv(fc.go.mf.p.up.res04  , file = "Pathway_GO term/4.fc.go.mf.p.up.res04.csv")
+write.csv(fc.go.cc.p.up.res04  , file = "Pathway_GO term/4.fc.go.cc.p.up.res04.csv")
+write.csv(fc.go.bp.p.down.res04, file = "Pathway_GO term/4.fc.go.bp.p.down.res04.csv")
+write.csv(fc.go.mf.p.down.res04, file = "Pathway_GO term/4.fc.go.mf.p.down.res04.csv")
+write.csv(fc.go.cc.p.down.res04, file = "Pathway_GO term/4.fc.go.cc.p.down.res04.csv")
